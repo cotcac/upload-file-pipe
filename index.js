@@ -8,22 +8,18 @@ const path = require('path'),
       fs = require('fs');
 
 app.use(express.static('public'));//add this line so you can access static file
-app.get('/', function (req, res) {
-  
-  console.log(os.tmpdir());
-  
-  res.send('Hello World!');
-});
-//goodbye
-app.get('/goodbye', function (req, res) {
-   res.sendFile(__dirname+'/bye.html');
-});
 
+// home with form upload
+app.get('/', function (req, res) {
+   res.sendFile(__dirname+'/public/upload.html');
+});
+// post upload
 app.post('/upload', function(req, res, next){
   var busboy = new Busboy({ headers: req.headers });
   busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
     console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimetype);
     var saveTo = path.join(__dirname +"/public/upload",path.basename(filename));
+    // /hdd/node/movies/upload/public/upload/lat-mat.jpg
     console.log("[save to]", saveTo);
     
       file.pipe(fs.createWriteStream(saveTo));
